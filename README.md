@@ -30,4 +30,3 @@
 The recommended way to deploy this application is by using Docker Compose. 
 
 
-# onboarding
