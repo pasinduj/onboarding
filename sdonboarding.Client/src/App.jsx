@@ -1,12 +1,19 @@
 import './App.css'
 
+import Header from './components/header/Header';
+
+
 function App() {
   return (
     <>
-      <h1>MVP Studio Onboarding</h1>
+    <Header/>
+      
+      
       <p className="read-the-docs">
         Using Vite + React
       </p>
+
+      @MVP Studio 
     </>
   )
 }

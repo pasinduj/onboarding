@@ -1,0 +1,9 @@
+.flex-container {
+    display: flex;
+    
+    flex-direction:row;
+    width: fit-content;
+    justify-content: space-between;
+    gap: 30px; /* Adds space between items (adjust as needed) */
+    padding: 10px; /* Adds padding to the container */
+  }
