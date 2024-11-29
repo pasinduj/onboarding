@@ -1,22 +1,35 @@
 import './ViewCustomer.css';
 
 function ViewCustomer() {
+
+  const items = ["New York","Colombo","London","Tokyo"];
     return (
-      <>
-      <Header/>
-        
-      <div class="table-header">
-          
-          <div><h2>Id</h2></div>
-          <div><h2>Name</h2></div>
-          <div><h2>Address</h2></div>
          
-               
-       </div>
+       
+      <table className="table table-striped" aria-labelledby="tableLabel">
+     <thead>
+         <tr>
+             <th >Id</th>
+             <th >Name</th>
+             <th></th>
+             <th></th>
+         </tr>
+     </thead>
+     <tbody>
+        
+      { items.map((item) => (
+        <li> {item} </li>
+      ) )
+
+
+      }
+
+
+     </tbody>
+ </table>
         
   
-        @MVP Studio 
-      </>
+        
     )
   }
   
