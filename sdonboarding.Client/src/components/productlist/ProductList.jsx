@@ -1,47 +1,41 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { deleteCustomer } from "../../actions";
-import { setCustomers } from "../../actions";
+import { deleteProduct } from "../../actions";
 import { DataGrid } from "@mui/x-data-grid";
 import { Button } from "@mui/material";
 import axios from "axios";
 
-const CustomerList = () => {
-  const customers = useSelector((state) => state.customers);
-  console.log(customers);
+const ProductList = () => {
+  const products = useSelector((state) => state.products);
+  console.log(products);
   const dispatch = useDispatch();
   
-    // Fetch customers from the REST API on component load
+    // Fetch products from the REST API on component load
   useEffect(() => {
-    const fetchCustomers = async () => {
+    const fetchProducts = async () => {
       try {
-        const response = await axios.get("https://localhost:7279/api/Customer",{
-          headers: {
-            'Access-Control-Allow-Origin': '*'
-        }
-        });
-        console.log(response.data);
-        dispatch(setCustomers(response.data)); 
+        const response = await axios.get("https://localhost:7279/api/Product");
+        dispatch(setProducts(response.data)); 
         console.log('found records from API'+ response);
       } catch (error) {
-        console.error("Failed to fetch customers:", error);
+        console.error("Failed to fetch products:", error);
       }
     };
 
-    fetchCustomers();
+    fetchProducts();
   }, [dispatch]);
 
   const handleDelete = (id) => {
-    dispatch(deleteCustomer(id));
+    dispatch(deleteProduct(id));
   };
 
   const handleEdit = (id) => {
-    dispatch(editCustomer(id));
+    dispatch(editProduct(id));
   };
 
   const columns = [
     { field: "name", headerName: "Name", flex: 1 },
-    { field: "address", headerName: "Address", flex: 1 },
+    { field: "price", headerName: "Price", flex: 1 },
     {
       field: "edit",
       headerName: "",
@@ -74,15 +68,16 @@ const CustomerList = () => {
     },
   ];
 
-  const rows = customers.map((customer) => ({
-    id: customer.id,
-    name: customer.name,
-    address: customer.address,
+
+  const rows = products.map((product) => ({
+    id: product.id,
+    name: product.name,
+    price: product.price,
   }));
 
   return (
     <div style={{ height: 400, width: "100%" }}>
-      <h3>Customers:</h3>
+      <h3>Products:</h3>
       <DataGrid
         rows={rows}
         columns={columns}
@@ -95,4 +90,4 @@ const CustomerList = () => {
   );
 };
 
-export default CustomerList;
+export default ProductList;

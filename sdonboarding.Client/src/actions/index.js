@@ -22,3 +22,27 @@ export const addCustomerName = (name,address) => {
       payload: id,
     };
   };
+
+  export const setCustomers = (customers) => ({
+    type: "SET_CUSTOMERS",
+    payload: customers,
+  });
+
+
+  export const addProductName = (name,price) => {
+    return {
+      type: "ADD_PRODUCT",
+      payload: {
+        id: new Date().getTime(),
+        name: name,
+        price: price,
+      },
+    };
+  };
+  
+  export const deleteProduct = (id) => {
+    return {
+      type: "DELETE_PRODUCT",
+      payload: id,
+    };
+  };
