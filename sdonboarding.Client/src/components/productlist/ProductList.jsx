@@ -1,9 +1,12 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { deleteProduct } from "../../actions";
+import { setProducts } from "../../actions";
 import { DataGrid } from "@mui/x-data-grid";
 import { Button } from "@mui/material";
 import axios from "axios";
+
+
 
 const ProductList = () => {
   const products = useSelector((state) => state.products);
@@ -14,7 +17,14 @@ const ProductList = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get("https://localhost:7279/api/Product");
+        const response = await axios.get("https://localhost:7279/api/Product",{
+            headers: {
+              'Access-Control-Allow-Origin': '*'
+          }
+          }
+
+        );
+        console.log(response);
         dispatch(setProducts(response.data)); 
         console.log('found records from API'+ response);
       } catch (error) {
@@ -26,6 +36,22 @@ const ProductList = () => {
   }, [dispatch]);
 
   const handleDelete = (id) => {
+
+    const productId = id; 
+    try{
+      const response = axios.delete('https://localhost:7279/api/Product/' + productId ,
+
+        {
+          headers: {
+            'Access-Control-Allow-Origin': '*'
+        }
+        }
+
+      )
+    }catch(error){
+        console.error("Failed to delete product with product id:"+productId , error);
+      } 
+
     dispatch(deleteProduct(id));
   };
 

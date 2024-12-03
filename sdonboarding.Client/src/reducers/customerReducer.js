@@ -34,7 +34,7 @@ const initialState = {
           products: state.products.filter(product => product.id !== action.payload)
         };
 
-      case "SET_PRODUCT":
+      case "SET_PRODUCTS":
         return {
         ...state,
         products: action.payload,

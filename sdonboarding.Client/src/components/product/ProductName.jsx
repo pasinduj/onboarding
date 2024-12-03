@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { addProductName } from "../../actions";
 import { Button } from "@mui/material";
 import TextField from '@mui/material/TextField';
+import axios from "axios";
 
 const ProductName = () => {
     const dispatch = useDispatch();
@@ -13,6 +14,17 @@ const ProductName = () => {
       const name = inputPNameRef.current.value.trim();
       const price = inputPPriceRef.current.value.trim();
       if (name !== "") {
+
+        try{
+            const response = axios.post('https://localhost:7279/api/Product', {          
+              name: name,
+            price: price
+          })
+        }catch(error){
+          console.error("Failed to save new Product:", error);
+        }   
+
+
         dispatch(addProductName(name,price));
         inputPNameRef.current.value = "";
         inputPPriceRef.current.value = "";
