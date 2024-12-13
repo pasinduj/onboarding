@@ -1,7 +1,8 @@
 
 const initialState = {
     customers: [],
-    products:[]
+    products:[],
+    stores:[]
   };
   
   const customerReducer = (state = initialState, action) => {
@@ -40,6 +41,42 @@ const initialState = {
         products: action.payload,
       };
     
+      case 'ADD_STORE':
+        return {
+          ...state,
+          stores: [...state.stores, action.payload]
+        };
+      case 'DELETE_STORE':
+        return {
+          ...state,
+          stores: state.stores.filter(store => store.id !== action.payload)
+        };
+
+      case "SET_STORES":
+        return {
+        ...state,
+        stores: action.payload,
+      };
+
+
+      case 'ADD_SALE':
+        return {
+          ...state,
+          sales: [...state.sales, action.payload]
+        };
+      case 'DELETE_SALE':
+        return {
+          ...state,
+          sales: state.sales.filter(sale => sale.id !== action.payload)
+        };
+
+      case "SET_SALES":
+        return {
+        ...state,
+        sales: action.payload,
+      };
+
+
       default:
         return state;
     }

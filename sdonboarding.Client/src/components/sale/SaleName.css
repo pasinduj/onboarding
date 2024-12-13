@@ -1,0 +1,21 @@
+
+  .customer-dropdown {
+    width: 300px; /* Set the width */
+    height: 40px; /* Set the height */
+  }
+
+  .product-dropdown {
+    width: 300px; /* Set the width */
+    height: 40px; /* Set the height */
+  }
+
+  .store-dropdown {
+    width: 300px; /* Set the width */
+    height: 40px; /* Set the height */
+  }
+  
+  .flex-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Add spacing between elements if needed */
+  }

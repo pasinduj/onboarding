@@ -56,7 +56,7 @@ const CustomerList = () => {
       setSelectedCustomerId(null);
     }
   };
-  
+
   const handleDialogOpen = (id) => {
     setSelectedCustomerId(id);
     setOpenDialog(true);
@@ -135,7 +135,7 @@ const CustomerList = () => {
         <DialogTitle>Confirm Deletion</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Are you sure you want to delete this customer? This action cannot be undone.
+            Are you sure you want to delete this customer? 
           </DialogContentText>
         </DialogContent>
         <DialogActions>
