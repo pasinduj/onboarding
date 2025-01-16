@@ -26,7 +26,7 @@ const SaleName = () => {
   useEffect(() => {
     const fetchCustomers = async () => {
       try {
-        const response = await axios.get("https://localhost:7279/api/Customer");
+        const response = await axios.get("https://onboardinginventoryapp.azurewebsites.net/api/Customer");
         setCustomers(response.data); // Assuming response.data is an array of customers
       } catch (error) {
         console.error("Failed to fetch customers:", error);
@@ -39,7 +39,7 @@ const SaleName = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get("https://localhost:7279/api/Product");
+        const response = await axios.get("https://onboardinginventoryapp.azurewebsites.net/api/Product");
         setProducts(response.data); // Assuming response.data is an array of Products
       } catch (error) {
         console.error("Failed to fetch products:", error);
@@ -52,7 +52,7 @@ const SaleName = () => {
   useEffect(() => {
     const fetchStores = async () => {
       try {
-        const response = await axios.get("https://localhost:7279/api/Store");
+        const response = await axios.get("https://onboardinginventoryapp.azurewebsites.net/api/Store");
         setStores(response.data); // Assuming response.data is an array of stores
       } catch (error) {
         console.error("Failed to fetch stores:", error);
@@ -83,7 +83,7 @@ const SaleName = () => {
       if (customerId !== "") {
 
         try{
-            const response = axios.post('https://localhost:7279/api/Sales', {          
+            const response = axios.post('https://onboardinginventoryapp.azurewebsites.net/api/Sales', {          
                 customerId: customerId,
                 productId: productId,
                 storeId: storeId,

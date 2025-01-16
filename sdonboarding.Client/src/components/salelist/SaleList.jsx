@@ -17,7 +17,7 @@ const SaleList = () => {
   useEffect(() => {
     const fetchSales = async () => {
       try {
-        const response = await axios.get("https://localhost:7279/api/Sales",{
+        const response = await axios.get("https://onboardinginventoryapp.azurewebsites.net/api/Sales",{
             headers: {
               'Access-Control-Allow-Origin': '*'
           }
@@ -39,7 +39,7 @@ const SaleList = () => {
 
     const saleId = id; 
     try{
-      const response = axios.delete('https://localhost:7279/api/Sales/' + saleId ,
+      const response = axios.delete('https://onboardinginventoryapp.azurewebsites.net/api/Sales/' + saleId ,
 
         {
           headers: {

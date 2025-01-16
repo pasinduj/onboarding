@@ -24,7 +24,7 @@ const ProductList = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get("https://localhost:7279/api/Product",{
+        const response = await axios.get("https://onboardinginventoryapp.azurewebsites.net/api/Product",{
             headers: {
               'Access-Control-Allow-Origin': '*'
           }
@@ -46,7 +46,7 @@ const ProductList = () => {
     if (selectedProductId === null) return;
 
     try {
-      await axios.delete(`https://localhost:7279/api/Product/${selectedProductId}`, {
+      await axios.delete(`https://onboardinginventoryapp.azurewebsites.net/Product/${selectedProductId}`, {
         headers: {
           "Access-Control-Allow-Origin": "*",
         },

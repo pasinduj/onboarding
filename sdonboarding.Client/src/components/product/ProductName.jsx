@@ -16,7 +16,7 @@ const ProductName = () => {
       if (name !== "") {
 
         try{
-            const response = axios.post('https://localhost:7279/api/Product', {          
+            const response = axios.post('https://onboardinginventoryapp.azurewebsites.net/api/Product', {          
               name: name,
             price: price
           })

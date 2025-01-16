@@ -35,5 +35,5 @@
     "postcss": "^8.4.47",
     "vite": "^5.4.9"
   },
-    "proxy": "https://127.0.0.1:7279/"
+    "proxy": "http://onboardinginventoryapp.azurewebsites.net"
 }

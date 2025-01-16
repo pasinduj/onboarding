@@ -23,7 +23,7 @@ const CustomerList = () => {
   useEffect(() => {
     const fetchCustomers = async () => {
       try {
-        const response = await axios.get("https://localhost:7279/api/Customer",{
+        const response = await axios.get("https://onboardinginventoryapp.azurewebsites.net/api/Customer",{
           headers: {
             'Access-Control-Allow-Origin': '*'
         }
@@ -43,7 +43,7 @@ const CustomerList = () => {
     if (selectedCustomerId === null) return;
 
     try {
-      await axios.delete(`https://localhost:7279/api/Customer/${selectedCustomerId}`, {
+      await axios.delete(`https://onboardinginventoryapp.azurewebsites.net/api/Customer/${selectedCustomerId}`, {
         headers: {
           "Access-Control-Allow-Origin": "*",
         },

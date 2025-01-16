@@ -23,7 +23,7 @@ const StoreList = () => {
   useEffect(() => {
     const fetchStores = async () => {
       try {
-        const response = await axios.get("https://localhost:7279/api/Store",{
+        const response = await axios.get("https://onboardinginventoryapp.azurewebsites.net/api/Store",{
           headers: {
             'Access-Control-Allow-Origin': '*'
         }
@@ -42,7 +42,7 @@ const StoreList = () => {
     if (selectedStoreId === null) return;
 
     try {
-      await axios.delete(`https://localhost:7279/api/Store/${selectedStoreId}`, {
+      await axios.delete(`https://onboardinginventoryapp.azurewebsites.net/api/Store/${selectedStoreId}`, {
         headers: {
           "Access-Control-Allow-Origin": "*",
         },
