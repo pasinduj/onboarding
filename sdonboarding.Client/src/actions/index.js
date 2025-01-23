@@ -1,10 +1,10 @@
-export const addCustomerName = (name,address) => {
+export const addCustomerName = (customer) => {
     return {
       type: "ADD_CUSTOMER",
       payload: {
-        id: new Date().getTime(),
-        name: name,
-        address: address,
+        id: customer.id,
+        name: customer.name,
+        address: customer.address,
       },
     };
   };
@@ -29,13 +29,13 @@ export const addCustomerName = (name,address) => {
   });
 
 
-  export const addProductName = (name,price) => {
+  export const addProductName = (product) => {
     return {
       type: "ADD_PRODUCT",
       payload: {
-        id: new Date().getTime(),
-        name: name,
-        price: price,
+        id: product.id,
+        name: product.name,
+        price: product.price,
       },
     };
   };
@@ -53,13 +53,13 @@ export const addCustomerName = (name,address) => {
   });
 
 
-  export const addStoreName = (name,address) => {
+  export const addStoreName = (store) => {
     return {
       type: "ADD_STORE",
       payload: {
-        id: new Date().getTime(),
-        name: name,
-        address: address,
+        id: store.id,
+        name: store.name,
+        address: store.address,
       },
     };
   };

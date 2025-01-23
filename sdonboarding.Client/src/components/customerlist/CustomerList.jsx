@@ -76,6 +76,7 @@ const CustomerList = () => {
   };
 
   const columns = [
+    {field: "id", headerName: "Id",flex:1},
     { field: "name", headerName: "Name", flex: 1 },
     { field: "address", headerName: "Address", flex: 1 },
     {

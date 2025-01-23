@@ -5,31 +5,41 @@ import { Button } from "@mui/material";
 import TextField from '@mui/material/TextField';
 import axios from "axios";
 
-const StoreName = () => {
+const StoreName = ({ refreshStores }) => {
     const dispatch = useDispatch();
     const inputSNameRef = useRef(null);
     const inputSAddressRef = useRef(null);
-  
-    function addNewStore() {
+
+
+    const addNewStore = async () => {
       const name = inputSNameRef.current.value.trim();
       const address = inputSAddressRef.current.value.trim();
       if (name !== "") {
-
-        try{
-          const response = axios.post('https://onboardinginventoryapp.azurewebsites.net/api/Store', {          
-            name: name,
-          address: address
-        })
-      }catch(error){
-        console.error("Failed to save new Store:", error);
-      }   
-
-
-        dispatch(addStoreName(name,address));
-        inputSNameRef.current.value = "";
-        inputSAddressRef.current.value = "";
+        try {
+          const response = await axios.post(
+            "https://onboardinginventoryapp.azurewebsites.net/api/Store",
+            { name, address }
+          );
+  
+          // Assuming the response contains the created store with its correct ID
+          const createdStore = response.data;
+  
+          // Dispatch the action with the created store object
+          dispatch(addStoreName(createdStore));
+  
+          // Optionally refresh the store list to stay in sync
+          if (refreshStores) refreshStores();
+  
+          // Clear the input fields
+          inputSNameRef.current.value = "";
+          inputSAddressRef.current.value = "";
+        } catch (error) {
+          console.error("Failed to save new store:", error);
+        }
       }
-    }
+    };
+  
+    
   
     return (
       <div >

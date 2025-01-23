@@ -46,7 +46,7 @@ const ProductList = () => {
     if (selectedProductId === null) return;
 
     try {
-      await axios.delete(`https://onboardinginventoryapp.azurewebsites.net/Product/${selectedProductId}`, {
+      await axios.delete(`https://onboardinginventoryapp.azurewebsites.net/api/Product/${selectedProductId}`, {
         headers: {
           "Access-Control-Allow-Origin": "*",
         },
@@ -77,6 +77,7 @@ const ProductList = () => {
   };
 
   const columns = [
+    {field:"id",headerName:"Id",flex: 1},
     { field: "name", headerName: "Name", flex: 1 },
     { field: "price", headerName: "Price", flex: 1 },
     {
