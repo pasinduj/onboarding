@@ -36,14 +36,14 @@ function App() {
      
          {activeSection === "customers" && (
         <>
-          <CustomerName />
+          
           <CustomerList />
         </>
       )}
 
       {activeSection === "products" && (
         <>
-          <ProductName />
+          
           <ProductList />
         </>
       )}
@@ -51,7 +51,7 @@ function App() {
 
 {activeSection === "stores" && (
         <>
-          <StoreName />
+         
           <StoreList />
         </>
       )}

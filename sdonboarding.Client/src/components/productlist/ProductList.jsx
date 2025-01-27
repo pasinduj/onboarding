@@ -10,6 +10,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from "@mui/material/DialogTitle";
+import ProductName from "./../product/ProductName";
 
 
 const ProductList = () => {
@@ -19,25 +20,28 @@ const ProductList = () => {
 
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState(null);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+
+
+  const fetchProducts = async () => {
+    try {
+      const response = await axios.get("https://onboardinginventoryapp.azurewebsites.net/api/Product",{
+          headers: {
+            'Access-Control-Allow-Origin': '*'
+        }
+        }
+
+      );
+      console.log(response);
+      dispatch(setProducts(response.data)); 
+      console.log('found records from API'+ response);
+    } catch (error) {
+      console.error("Failed to fetch products:", error);
+    }
+  };
   
     // Fetch products from the REST API on component load
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await axios.get("https://onboardinginventoryapp.azurewebsites.net/api/Product",{
-            headers: {
-              'Access-Control-Allow-Origin': '*'
-          }
-          }
-
-        );
-        console.log(response);
-        dispatch(setProducts(response.data)); 
-        console.log('found records from API'+ response);
-      } catch (error) {
-        console.error("Failed to fetch products:", error);
-      }
-    };
+  useEffect(() => {   
 
     fetchProducts();
   }, [dispatch]);
@@ -73,7 +77,11 @@ const ProductList = () => {
 
 
   const handleEdit = (id) => {
-    dispatch(editProduct(id));
+    console.log('Edit button press');
+    console.log(id);
+    setSelectedProductId(id);
+    const product = products.find((product) => product.id === id);
+    setSelectedProduct(product);
   };
 
   const columns = [
@@ -121,6 +129,10 @@ const ProductList = () => {
   }));
 
   return (
+    <div>
+
+
+<ProductName refreshProducts={fetchProducts} selectedProduct={selectedProduct} />
     <div style={{ height: 400, width: "100%" }}>
       <h3>Products:</h3>
       <DataGrid
@@ -151,7 +163,7 @@ const ProductList = () => {
 
 
 
-
+      </div>
 
     </div>
   );

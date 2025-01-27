@@ -16,6 +16,19 @@ export const addCustomerName = (customer) => {
     };
   };
 
+
+  export const updateCustomerInfo = (customer) => {
+    return {
+      type: "UPDATE_CUSTOMER",
+      payload: {
+        id: customer.id,
+        name: customer.name,
+        address: customer.address,
+      },
+    };
+  };
+
+
   export const editCustomer = (id) => {
     return {
       type: "EDIT_CUSTOMER",
@@ -52,6 +65,17 @@ export const addCustomerName = (customer) => {
     payload: products,
   });
 
+  export const updateProductInfo = (product) => {
+    return {
+      type: "UPDATE_PRODUCT",
+      payload: {
+        id: product.id,
+        name: product.name,
+        price: product.price,
+      },
+    };
+  };
+
 
   export const addStoreName = (store) => {
     return {
@@ -75,6 +99,19 @@ export const addCustomerName = (customer) => {
     type: "SET_STORES",
     payload: stores,
   });
+
+
+  export const updateStoreInfo = (store) => {
+    return {
+      type: "UPDATE_STORE",
+      payload: {
+        id: store.id,
+        name: store.name,
+        address: store.address,
+      },
+    };
+  };
+
 
 
   export const addSaleName = (customer,product,store) => {

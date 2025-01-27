@@ -10,6 +10,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from "@mui/material/DialogTitle";
+import StoreName from "./../store/StoreName";
 
 const StoreList = () => {
   const stores = useSelector((state) => state.stores);
@@ -18,23 +19,27 @@ const StoreList = () => {
 
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedStoreId, setSelectedStoreId] = useState(null);
-  
-    // Fetch stores from the REST API on component load
-  useEffect(() => {
-    const fetchStores = async () => {
-      try {
-        const response = await axios.get("https://onboardinginventoryapp.azurewebsites.net/api/Store",{
+  const [selectedStore, setSelectedStore] = useState(null);
+
+  // Function to fetch stores from the REST API
+  const fetchStores = async () => {
+    try {
+      const response = await axios.get(
+        "https://onboardinginventoryapp.azurewebsites.net/api/Store",
+        {
           headers: {
-            'Access-Control-Allow-Origin': '*'
+            "Access-Control-Allow-Origin": "*",
+          },
         }
-        });
-        console.log(response.data);
-        dispatch(setStores(response.data)); 
-        console.log('found records from API'+ response);
-      } catch (error) {
-        console.error("Failed to fetch stores:", error);
-      }
-    };
+      );
+      dispatch(setStores(response.data));
+    } catch (error) {
+      console.error("Failed to fetch stores:", error);
+    }
+  };
+  
+    // Fetch stores on component mount
+  useEffect(() => {
     fetchStores();
   }, [dispatch]);
 
@@ -68,8 +73,14 @@ const StoreList = () => {
 
 
 
+  
+
   const handleEdit = (id) => {
-    dispatch(editStore(id));
+    console.log('Edit button press');
+    console.log(id);
+    setSelectedStoreId(id);
+    const store = stores.find((store) => store.id === id);
+    setSelectedStore(store);
   };
 
   const columns = [
@@ -116,6 +127,10 @@ const StoreList = () => {
   }));
 
   return (
+
+    <div>
+
+<StoreName refreshStores={fetchStores} selectedStore={selectedStore} />
     <div style={{ height: 400, width: "100%" }}>
       <h3>Stores:</h3>
       <DataGrid
@@ -144,6 +159,8 @@ const StoreList = () => {
         </DialogActions>
       </Dialog>
 
+
+    </div>
 
     </div>
   );

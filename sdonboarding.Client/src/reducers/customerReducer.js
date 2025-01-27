@@ -24,6 +24,14 @@ const initialState = {
         customers: action.payload,
       };
 
+      case 'UPDATE_CUSTOMER':
+      return {
+        ...state,
+        customers: state.customers.map((customer) =>
+          customer.id === action.payload.id ? action.payload : customer
+        ),
+      };
+
       case 'ADD_PRODUCT':
         return {
           ...state,

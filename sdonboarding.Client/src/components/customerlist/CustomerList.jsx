@@ -10,6 +10,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from "@mui/material/DialogTitle";
+import CustomerName from "./../customer/CustomerName";
 
 const CustomerList = () => {
   const customers = useSelector((state) => state.customers);
@@ -18,6 +19,7 @@ const CustomerList = () => {
 
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedCustomerId, setSelectedCustomerId] = useState(null);
+  const [selectedCustomer, setSelectedCustomer] = useState(null);
   
     // Fetch customers from the REST API on component load
   useEffect(() => {
@@ -57,6 +59,14 @@ const CustomerList = () => {
     }
   };
 
+  const handleEdit = (id) => {
+    console.log('Edit button press');
+    console.log(id);
+    setSelectedCustomerId(id);
+    const customer = customers.find((customer) => customer.id === id);
+    setSelectedCustomer(customer);
+  };
+
   const handleDialogOpen = (id) => {
     setSelectedCustomerId(id);
     setOpenDialog(true);
@@ -69,11 +79,7 @@ const CustomerList = () => {
 
 
 
-  const handleEdit = (id) => {  
-
-   
-    dispatch(editCustomer(id));
-  };
+  
 
   const columns = [
     {field: "id", headerName: "Id",flex:1},
@@ -121,14 +127,16 @@ const CustomerList = () => {
   }));
 
   return (
+    <div>
+
+   <CustomerName refreshCustomers={() => {}} selectedCustomer={selectedCustomer} />
     <div style={{ height: 400, width: "100%" }}>
       <h3>Customers:</h3>
       <DataGrid
         rows={rows}
         columns={columns}
         pageSize={5}
-        rowsPerPageOptions={[5]}
-        pageSizeOptions={[5, 10, 25, { value: -1, label: 'All' }]}
+        rowsPerPageOptions={[5]}       
         disableSelectionOnClick
       />
 
@@ -150,6 +158,7 @@ const CustomerList = () => {
       </Dialog>
 
 
+    </div>
     </div>
   );
 };
