@@ -138,3 +138,15 @@ export const addCustomerName = (customer) => {
     payload: sales,
   });
  
+
+  export const updateSaleInfo = (sale) => {
+    return {
+      type: "UPDATE_SALE",
+      payload: {
+        id: sale.id,
+        customerId: sale.customerId,
+        productId: sale.productId,
+        storeId: sale.storeId,
+      },
+    };
+  };

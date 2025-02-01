@@ -1,38 +1,92 @@
-import React, { useEffect } from "react";
+import React, { useState,useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { deleteSale } from "../../actions";
 import { setSales } from "../../actions";
 import { DataGrid } from "@mui/x-data-grid";
 import { Button } from "@mui/material";
 import axios from "axios";
-
-
+import dayjs from "dayjs"; 
+import "./SaleList.css";
+import SaleName from "./../sale/SaleName";
 
 const SaleList = () => {
-  const sales = useSelector((state) => state.sales);
+  const sales = useSelector((state) => state.sales|| []);
   console.log(sales);
   const dispatch = useDispatch();
+  const [selectedDate, setSelectedDate] = useState(dayjs()); 
+
+  const [customers, setCustomers] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [stores, setStores] = useState([]);
+  const [selectedSale, setSelectedSale] = useState(null);
+  const [selectedSaleId, setSelectedSaleId] = useState(null);
+
+  const fetchSales = async () => {
+    try {
+      const response = await axios.get("https://onboardinginventoryapp.azurewebsites.net/api/Sales",{
+          headers: {
+            'Access-Control-Allow-Origin': '*'
+        }
+        }
+
+      );
+      console.log(response);
+      dispatch(setSales(response.data)); 
+      console.log('found records from API'+ response);
+    } catch (error) {
+      console.error("Failed to fetch sales:", error);
+    }
+  };
   
     // Fetch products from the REST API on component load
   useEffect(() => {
-    const fetchSales = async () => {
+    
+    
+
+    const fetchCustomers = async () => {
       try {
-        const response = await axios.get("https://onboardinginventoryapp.azurewebsites.net/api/Sales",{
+        const response = await axios.get(
+          "https://onboardinginventoryapp.azurewebsites.net/api/Customer",
+          {
             headers: {
               'Access-Control-Allow-Origin': '*'
           }
           }
-
         );
-        console.log(response);
-        dispatch(setSales(response.data)); 
-        console.log('found records from API'+ response);
+        setCustomers(response.data);
       } catch (error) {
-        console.error("Failed to fetch sales:", error);
+        console.error("Failed to fetch customers:", error);
+      }
+    };
+
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get(
+          "https://onboardinginventoryapp.azurewebsites.net/api/Product"
+        );
+        setProducts(response.data);
+      } catch (error) {
+        console.error("Failed to fetch products:", error);
+      }
+    };
+
+    const fetchStores = async () => {
+      try {
+        const response = await axios.get(
+          "https://onboardinginventoryapp.azurewebsites.net/api/Store"
+        );
+        setStores(response.data);
+      } catch (error) {
+        console.error("Failed to fetch stores:", error);
       }
     };
 
     fetchSales();
+    fetchCustomers();
+    fetchProducts();
+    fetchStores();
+
+    
   }, [dispatch]);
 
   const handleDelete = (id) => {
@@ -56,13 +110,47 @@ const SaleList = () => {
   };
 
   const handleEdit = (id) => {
-    dispatch(editSale(id));
+    console.log('Edit button press');
+    console.log(id);
+    setSelectedSaleId(id);
+    const sale = sales.find((sale) => sale.id === id);
+    console.log(sale);
+    setSelectedSale(sale);
+   
   };
 
+  // Helper function to get name by ID
+  const getCustomerName = (id) => {
+    console.log(id);
+   // console.log(customers);
+  //  console.log(customers.length);
+    if (!customers.length) return "Loading..."; 
+    const customer = customers.find((c) => c.id === id);
+ //   console.log(customer);
+    return customer ? customer.name : "Unknown";
+  };
+
+  const getProductName = (id) => {
+    console.log(id);
+ //    console.log(products);
+    if (!products.length) return "Loading...";
+    const product = products.find((p) => p.id === id);
+    return product ? product.name : "Unknown";
+  };
+
+  const getStoreName = (id) => {
+    if (!stores.length) return "Loading...";
+    const store = stores.find((s) => s.id === id);
+    return store ? store.name : "Unknown";
+  };
+
+
   const columns = [
-    { field: "customerId", headerName: "customer", flex: 1 },
-    { field: "productId", headerName: "product", flex: 0.8 },
-    { field: "storeId", headerName: "Store", flex: 0.5 },
+    {field: "id", headerName: "Id",flex:1},
+    { field: "customerName", headerName: "customer", flex: 1.5, minWidth: 200 },
+    { field: "productName", headerName: "product", flex: 1.5, minWidth: 200 },
+    { field: "storeName", headerName: "Store", flex: 1.5, minWidth: 200 },
+    { field: "soldDate", headerName: "SoldDate", flex: 1.5, minWidth: 200 },
     {
       field: "edit",
       headerName: "",
@@ -76,7 +164,7 @@ const SaleList = () => {
           Edit
         </Button>
       ),
-      flex: 0.8,
+      flex: 1.5, minWidth: 150
     },
     {
       field: "delete",
@@ -91,22 +179,28 @@ const SaleList = () => {
           Delete
         </Button>
       ),
-      flex: 0.8,
+      flex: 1.5, minWidth: 150
     },
   ];
 
 
-  const rows =(sales|| []) .map((sale) => (
-      {    
+  
+
+    const rows = sales.filter((sale) => customers.length && products.length && stores.length).map((sale) => ({
     id: sale.id,
-    customerId:sale.customerId,
-    productId: sale.productId,
-    storeId: sale.storeId
-  })
-);
+    customerName: getCustomerName(sale.customerId),
+    productName: getProductName(sale.productId),
+    storeName: getStoreName(sale.storeId),
+    soldDate: selectedDate.format("YYYY-MM-DD"),
+  }));
+
 
   return (
-    <div style={{ height: 400, width: "100%" }}>
+
+   <div>
+    
+    <SaleName refreshSales={fetchSales} selectedSale={selectedSale} />
+    <div style={{ height: "80vh", width: "100%", minHeight: "500px" }}>
       <h3>Sales:</h3>
       <DataGrid
         rows={rows}
@@ -116,6 +210,7 @@ const SaleList = () => {
         pageSizeOptions={[5, 10, 25, { value: -1, label: 'All' }]}
         disableSelectionOnClick
       />
+    </div>
     </div>
   );
 };

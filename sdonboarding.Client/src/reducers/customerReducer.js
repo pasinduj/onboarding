@@ -2,7 +2,8 @@
 const initialState = {
     customers: [],
     products:[],
-    stores:[]
+    stores:[],
+    sales: []
   };
   
   const customerReducer = (state = initialState, action) => {

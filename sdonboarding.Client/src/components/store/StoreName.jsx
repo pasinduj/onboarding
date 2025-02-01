@@ -116,6 +116,7 @@ useEffect(() => {
             placeholder="Store Id"
             ref={inputSIdRef}
             className="storeInput"
+            readOnly
           />
 
           <input

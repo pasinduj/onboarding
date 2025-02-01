@@ -59,7 +59,7 @@ function App() {
 {
 activeSection === "sales" && (
         <>
-          <SaleName />
+          
           <SaleList />
         </>
       )}

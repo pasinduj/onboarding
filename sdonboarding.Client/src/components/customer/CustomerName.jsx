@@ -112,6 +112,7 @@ useEffect(() => {
             placeholder="Customer Id"
             ref={inputCIdRef}
             className="customerInput"
+            readOnly
           />
 
 
