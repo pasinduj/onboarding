@@ -1,4 +1,4 @@
-import { useRef,useEffect } from "react";
+import { useRef,useEffect,useState } from "react";
 import { useDispatch } from "react-redux";
 import { addStoreName,updateStoreInfo } from "../../actions";
 import { Button } from "@mui/material";
@@ -10,6 +10,7 @@ const StoreName = ({ refreshStores,selectedStore }) => {
     const inputSNameRef = useRef(null);
     const inputSAddressRef = useRef(null);
     const inputSIdRef = useRef(null);
+    const [isEditing, setIsEditing] = useState(false); // Track edit mode
 
       // Populate the input fields with the selected store's data
 useEffect(() => {
@@ -17,8 +18,12 @@ useEffect(() => {
     inputSIdRef.current.value = selectedStore.id;
     inputSNameRef.current.value = selectedStore.name;
     inputSAddressRef.current.value = selectedStore.address;
+    setIsEditing(true);
+  }else{
+    setIsEditing(false);
   }
 }, [selectedStore]);
+
 
     const addNewStore = async () => {
       const name = inputSNameRef.current.value.trim();
@@ -39,9 +44,7 @@ useEffect(() => {
           // Optionally refresh the store list to stay in sync
           if (refreshStores) refreshStores();
   
-          // Clear the input fields
-          inputSNameRef.current.value = "";
-          inputSAddressRef.current.value = "";
+          clearFields();
         } catch (error) {
           console.error("Failed to save new store:", error);
         }
@@ -51,7 +54,7 @@ useEffect(() => {
 
 
     const updateStore = async () => {
-      console.log('updateStore button press');
+     
       const id = inputSIdRef.current.value.trim();
       const name = inputSNameRef.current.value.trim();
       const address = inputSAddressRef.current.value.trim();
@@ -85,11 +88,8 @@ useEffect(() => {
   
           // Optionally refresh the product list to stay in sync
           if (refreshStores) refreshStores();
-  
-          // Clear the input fields
-          inputSNameRef.current.value = "";
-          inputSAddressRef.current.value = "";
-          inputSIdRef.current.value = "";
+          clearFields();
+          
         } catch (error) {
 
           if (error.response) {
@@ -101,9 +101,16 @@ useEffect(() => {
         }
       }
 
-
-
     }
+
+
+
+    const clearFields = () => {
+      inputSNameRef.current.value = "";
+      inputSAddressRef.current.value = "";
+      inputSIdRef.current.value = "";
+      setIsEditing(false); // Switch back to "Add Product" mode
+    };
     
   
     return (
@@ -133,9 +140,11 @@ useEffect(() => {
             className="storeInput"
           />
 
-
+      {!isEditing ? (
           <Button variant="contained" onClick={addNewStore} >Add Store </Button>
+        ) : (
           <Button variant="contained" onClick={updateStore} >Update Store </Button>
+        )}
         </div>
       </div>
     );

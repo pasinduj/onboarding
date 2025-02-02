@@ -24,7 +24,7 @@ const SaleName = ({ refreshSales ,selectedSale }) => {
   const [csoldDate, setcsoldDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(dayjs()); 
   const inputSIdRef = useRef(null);
-
+  const [isEditing, setIsEditing] = useState(false); // Track edit mode
 
   useEffect(() => {
     if (selectedSale) {
@@ -34,6 +34,9 @@ const SaleName = ({ refreshSales ,selectedSale }) => {
       setProductId(selectedSale.productId || "");
       setStoreId(selectedSale.storeId || "");
       setSelectedDate(dayjs(selectedSale.soldDate) || dayjs());
+      setIsEditing(true);
+    }else{
+      setIsEditing(false);
     }
   }, [selectedSale]);
 
@@ -112,11 +115,11 @@ const SaleName = ({ refreshSales ,selectedSale }) => {
 
         dispatch(addSaleName(customerId, productId, storeId));
 
-        // Reset inputs
-        setCustomerId("");
-        setProductId("");
-        setStoreId("");
-        setSelectedDate(dayjs()); // ✅ Reset date
+
+        if (refreshSales) refreshSales(); 
+
+        clearFields();
+   
       } catch (error) {
         console.error("Failed to save new Sale:", error);
       }
@@ -125,10 +128,10 @@ const SaleName = ({ refreshSales ,selectedSale }) => {
 
 
   const updateNewSale = async () => {
-    console.log(saleId);
+  
 
     if (saleId !== "") {
-      const id = saleId;
+      var id = saleId;
      
 
       const response = await axios.put(
@@ -155,12 +158,24 @@ const SaleName = ({ refreshSales ,selectedSale }) => {
      // inputCNameRef.current.value = "";
      // inputCAddressRef.current.value = "";
 
-
-
+     clearFields();
+     id="";
 
 
 
     }
+  };
+
+
+  const clearFields = () => {
+    // Reset inputs
+    setSaleId("");
+    inputSIdRef.current.value = "";
+    setCustomerId("");
+    setProductId("");
+    setStoreId("");
+    setSelectedDate(dayjs()); // ✅ Reset date
+    setIsEditing(false); // Switch back to "Add Product" mode
   };
 
   return (
@@ -254,12 +269,15 @@ const SaleName = ({ refreshSales ,selectedSale }) => {
           <div>
             </div>
 
+            {!isEditing ? (
           <Button variant="contained" onClick={addNewSale}>
             Add Sale
           </Button>
+            ) : (
           <Button variant="contained" onClick={updateNewSale}>
             Update Sale
           </Button>
+           )}
         </div>
       </div>
     </LocalizationProvider> // ✅ Closing tag for LocalizationProvider

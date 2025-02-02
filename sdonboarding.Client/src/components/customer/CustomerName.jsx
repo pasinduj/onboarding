@@ -1,8 +1,7 @@
-import { useRef,useEffect  } from "react";
+import { useRef,useEffect,useState   } from "react";
 import { useDispatch } from "react-redux";
 import { addCustomerName,updateCustomerInfo } from "../../actions";
 import { Button } from "@mui/material";
-import TextField from '@mui/material/TextField';
 import axios from "axios";
 
 const CustomerName = ({ refreshCustomers , selectedCustomer }) => {
@@ -10,6 +9,7 @@ const CustomerName = ({ refreshCustomers , selectedCustomer }) => {
     const inputCNameRef = useRef(null);
     const inputCAddressRef = useRef(null);
     const inputCIdRef = useRef(null);
+    const [isEditing, setIsEditing] = useState(false); // Track edit mode
 
 // Populate the input fields with the selected customer's data
 useEffect(() => {
@@ -17,6 +17,9 @@ useEffect(() => {
     inputCIdRef.current.value = selectedCustomer.id;
     inputCNameRef.current.value = selectedCustomer.name;
     inputCAddressRef.current.value = selectedCustomer.address;
+    setIsEditing(true);
+  }else{
+    setIsEditing(false); 
   }
 }, [selectedCustomer]);
 
@@ -40,9 +43,7 @@ useEffect(() => {
           // Optionally refresh the customer list to stay in sync
           if (refreshCustomers) refreshCustomers();
   
-          // Clear the input fields
-          inputCNameRef.current.value = "";
-          inputCAddressRef.current.value = "";
+          clearFields();
         } catch (error) {
           console.error("Failed to save new customer:", error);
         }
@@ -79,10 +80,7 @@ useEffect(() => {
           // Optionally refresh the customer list to stay in sync
           if (refreshCustomers) refreshCustomers();
   
-          // Clear the input fields
-          inputCIdRef.current.value = "";
-          inputCNameRef.current.value = "";
-          inputCAddressRef.current.value = "";
+          clearFields();
         } catch (error) {
 
           if (error.response) {
@@ -99,6 +97,14 @@ useEffect(() => {
 
 
     }
+
+
+    const clearFields = () => {
+      inputCIdRef.current.value = "";
+      inputCNameRef.current.value = "";
+      inputCAddressRef.current.value = "";
+      setIsEditing(false); // Switch back to "Add Customer" mode
+    };
 
 
     
@@ -130,9 +136,11 @@ useEffect(() => {
             className="customerInput"
           />
 
-
+       {!isEditing ? (
           <Button variant="contained" onClick={addNewCustomer} >Add Customer </Button>
+        ) : (
           <Button variant="contained" onClick={updateCustomer} >Update Customer </Button>
+        )}
         </div>
       </div>
     );

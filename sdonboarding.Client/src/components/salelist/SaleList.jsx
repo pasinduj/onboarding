@@ -22,6 +22,7 @@ const SaleList = () => {
   const [selectedSaleId, setSelectedSaleId] = useState(null);
 
   const fetchSales = async () => {
+    console.log('call fetch sales');
     try {
       const response = await axios.get("https://onboardinginventoryapp.azurewebsites.net/api/Sales",{
           headers: {
@@ -120,27 +121,27 @@ const SaleList = () => {
   };
 
   // Helper function to get name by ID
-  const getCustomerName = (id) => {
-    console.log(id);
+  const getCustomerName = (cid) => {
+    console.log(cid);
    // console.log(customers);
   //  console.log(customers.length);
     if (!customers.length) return "Loading..."; 
-    const customer = customers.find((c) => c.id === id);
+    const customer = customers.find((c) => c.id === cid);
  //   console.log(customer);
     return customer ? customer.name : "Unknown";
   };
 
-  const getProductName = (id) => {
-    console.log(id);
+  const getProductName = (pid) => {
+    console.log(pid);
  //    console.log(products);
     if (!products.length) return "Loading...";
-    const product = products.find((p) => p.id === id);
+    const product = products.find((p) => p.id === pid);
     return product ? product.name : "Unknown";
   };
 
-  const getStoreName = (id) => {
+  const getStoreName = (sid) => {
     if (!stores.length) return "Loading...";
-    const store = stores.find((s) => s.id === id);
+    const store = stores.find((s) => s.id === sid);
     return store ? store.name : "Unknown";
   };
 
@@ -186,11 +187,11 @@ const SaleList = () => {
 
   
 
-    const rows = sales.filter((sale) => customers.length && products.length && stores.length).map((sale) => ({
+  const rows = sales.map((sale) => ({
     id: sale.id,
-    customerName: getCustomerName(sale.customerId),
-    productName: getProductName(sale.productId),
-    storeName: getStoreName(sale.storeId),
+    customerName: customers.length ? getCustomerName(sale.customerId) : "Loading...",
+    productName: products.length ? getProductName(sale.productId) : "Loading...",
+    storeName: stores.length ? getStoreName(sale.storeId) : "Loading...",
     soldDate: selectedDate.format("YYYY-MM-DD"),
   }));
 

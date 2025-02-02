@@ -1,8 +1,7 @@
-import { useRef,useEffect } from "react";
+import { useRef,useEffect,useState} from "react";
 import { useDispatch } from "react-redux";
 import { addProductName,updateProductInfo } from "../../actions";
 import { Button } from "@mui/material";
-import TextField from '@mui/material/TextField';
 import axios from "axios";
 
 const ProductName = ( {refreshProducts,selectedProduct} ) => {
@@ -10,6 +9,7 @@ const ProductName = ( {refreshProducts,selectedProduct} ) => {
     const inputPNameRef = useRef(null);
     const inputPPriceRef = useRef(null);
     const inputPIdRef = useRef(null);
+    const [isEditing, setIsEditing] = useState(false); // Track edit mode
 
     // Populate the input fields with the selected product's data
 useEffect(() => {
@@ -17,6 +17,9 @@ useEffect(() => {
     inputPIdRef.current.value = selectedProduct.id;
     inputPNameRef.current.value = selectedProduct.name;
     inputPPriceRef.current.value = selectedProduct.price;
+    setIsEditing(true);
+  }else{
+    setIsEditing(false);
   }
 }, [selectedProduct]);
 
@@ -40,9 +43,7 @@ useEffect(() => {
           // Optionally refresh the product list to stay in sync
           if (refreshProducts) refreshProducts();
   
-          // Clear the input fields
-          inputPNameRef.current.value = "";
-          inputPPriceRef.current.value = "";
+          clearFields();
         } catch (error) {
           console.error("Failed to save new product:", error);
         }
@@ -59,12 +60,6 @@ useEffect(() => {
       if (name !== "") {
         try {
 
-
-     /*     const response = await axios.put(
-            `https://onboardinginventoryapp.azurewebsites.net/api/Product/${cid}`, // URL with dynamic ID
-            { name, price }, // Request body (data)
-           
-          ); */
 
           const response = await axios.put(
             `https://onboardinginventoryapp.azurewebsites.net/api/Product/${id}`, // URL
@@ -85,10 +80,7 @@ useEffect(() => {
           // Optionally refresh the product list to stay in sync
           if (refreshProducts) refreshProducts();
   
-          // Clear the input fields
-          inputPIdRef.current.value = "";
-          inputPNameRef.current.value = "";
-          inputPPriceRef.current.value = "";
+          clearFields();
         } catch (error) {
 
           if (error.response) {
@@ -105,6 +97,14 @@ useEffect(() => {
 
 
     }
+
+
+    const clearFields = () => {
+      inputPIdRef.current.value = "";
+      inputPNameRef.current.value = "";
+      inputPPriceRef.current.value = "";
+      setIsEditing(false); // Switch back to "Add Product" mode
+    };
     
   
     return (
@@ -139,9 +139,11 @@ useEffect(() => {
             className="productInput"
           />
 
-
+       {!isEditing ? (
           <Button variant="contained" onClick={addNewProduct} >Add Product </Button>
+        ) : (
           <Button variant="contained" onClick={updateProduct} >Update Product </Button>
+        )}
         </div>
       </div>
     );
