@@ -11,6 +11,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from "@mui/material/DialogTitle";
 import StoreName from "./../store/StoreName";
+import './StoreList.css';
 
 const StoreList = () => {
   const stores = useSelector((state) => state.stores);
@@ -86,7 +87,7 @@ const StoreList = () => {
   const columns = [
     {field:"id",headerName:"Id",flex: 1 },
     { field: "name", headerName: "Name", flex: 1 },
-    { field: "address", headerName: "Address", flex: 1 },
+    { field: "address", headerName: "Address", flex: 2 },
     {
       field: "edit",
       headerName: "",
@@ -100,7 +101,7 @@ const StoreList = () => {
           Edit
         </Button>
       ),
-      flex: 0.5,
+      flex: 1,
     },
     {
       field: "delete",
@@ -116,7 +117,7 @@ const StoreList = () => {
         </Button>
 
       ),
-      flex: 0.8,
+      flex: 1,
     },
   ];
 
@@ -131,7 +132,7 @@ const StoreList = () => {
     <div>
 
 <StoreName refreshStores={fetchStores} selectedStore={selectedStore} />
-    <div style={{ height: 400, width: "100%" }}>
+    <div className="storelist">
       <h3>Stores:</h3>
       <DataGrid
         rows={rows}

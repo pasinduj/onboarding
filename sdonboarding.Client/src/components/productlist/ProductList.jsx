@@ -11,6 +11,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from "@mui/material/DialogTitle";
 import ProductName from "./../product/ProductName";
+import './ProductList.css';
 
 
 const ProductList = () => {
@@ -133,7 +134,7 @@ const ProductList = () => {
 
 
 <ProductName refreshProducts={fetchProducts} selectedProduct={selectedProduct} />
-    <div style={{ height: 400, width: "100%" }}>
+    <div className="productlist">
       <h3>Products:</h3>
       <DataGrid
         rows={rows}

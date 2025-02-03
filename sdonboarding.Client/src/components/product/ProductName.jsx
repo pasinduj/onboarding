@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { addProductName,updateProductInfo } from "../../actions";
 import { Button } from "@mui/material";
 import axios from "axios";
+import './ProductName.css';
 
 const ProductName = ( {refreshProducts,selectedProduct} ) => {
     const dispatch = useDispatch();
@@ -10,6 +11,9 @@ const ProductName = ( {refreshProducts,selectedProduct} ) => {
     const inputPPriceRef = useRef(null);
     const inputPIdRef = useRef(null);
     const [isEditing, setIsEditing] = useState(false); // Track edit mode
+    const [errorMessage, setErrorMessage] = useState("");
+    const [successMessage, setSuccessMessage] = useState(""); 
+    
 
     // Populate the input fields with the selected product's data
 useEffect(() => {
@@ -27,6 +31,13 @@ useEffect(() => {
     const addNewProduct = async () => {
       const name = inputPNameRef.current.value.trim();
       const price = inputPPriceRef.current.value.trim();
+
+      if (name === "" || price === "") {
+        setErrorMessage("Product Name and Price cannot be empty!");
+        return;
+      }
+
+
       if (name !== "") {
         try {
           const response = await axios.post(
@@ -44,6 +55,8 @@ useEffect(() => {
           if (refreshProducts) refreshProducts();
   
           clearFields();
+          setErrorMessage("");
+          setSuccessMessage("Successfully Added");
         } catch (error) {
           console.error("Failed to save new product:", error);
         }
@@ -51,7 +64,7 @@ useEffect(() => {
     };
 
     const updateProduct = async () => {
-      console.log('updateProduct button press');
+      
       const id = inputPIdRef.current.value.trim();
       const name = inputPNameRef.current.value.trim();
       const price = inputPPriceRef.current.value.trim();
@@ -81,6 +94,8 @@ useEffect(() => {
           if (refreshProducts) refreshProducts();
   
           clearFields();
+          setErrorMessage("");
+          setSuccessMessage("Successfully Updated");
         } catch (error) {
 
           if (error.response) {
@@ -138,6 +153,14 @@ useEffect(() => {
             ref={inputPPriceRef}
             className="productInput"
           />
+
+<div id="errorNumber1" className="errormsg">
+          {errorMessage}
+        </div>
+
+        <div id="success" className="successmsg">
+          {successMessage}
+        </div>
 
        {!isEditing ? (
           <Button variant="contained" onClick={addNewProduct} >Add Product </Button>

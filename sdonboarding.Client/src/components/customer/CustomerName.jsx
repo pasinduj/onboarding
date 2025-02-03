@@ -3,6 +3,8 @@ import { useDispatch } from "react-redux";
 import { addCustomerName,updateCustomerInfo } from "../../actions";
 import { Button } from "@mui/material";
 import axios from "axios";
+import './CustomerName.css';
+
 
 const CustomerName = ({ refreshCustomers , selectedCustomer }) => {
     const dispatch = useDispatch();
@@ -10,6 +12,8 @@ const CustomerName = ({ refreshCustomers , selectedCustomer }) => {
     const inputCAddressRef = useRef(null);
     const inputCIdRef = useRef(null);
     const [isEditing, setIsEditing] = useState(false); // Track edit mode
+    const [errorMessage, setErrorMessage] = useState("");
+    const [successMessage, setSuccessMessage] = useState(""); 
 
 // Populate the input fields with the selected customer's data
 useEffect(() => {
@@ -27,6 +31,14 @@ useEffect(() => {
     const addNewCustomer = async () => {
       const name = inputCNameRef.current.value.trim();
       const address = inputCAddressRef.current.value.trim();
+
+
+      if (name === "" || address === "") {
+        setErrorMessage("Customer Name and Address cannot be empty!");
+        return;
+      }
+
+
       if (name !== "") {
         try {
           const response = await axios.post(
@@ -44,6 +56,9 @@ useEffect(() => {
           if (refreshCustomers) refreshCustomers();
   
           clearFields();
+          setErrorMessage("");
+          setSuccessMessage("Successfully Added");
+
         } catch (error) {
           console.error("Failed to save new customer:", error);
         }
@@ -81,6 +96,8 @@ useEffect(() => {
           if (refreshCustomers) refreshCustomers();
   
           clearFields();
+          setErrorMessage("");
+          setSuccessMessage("Successfully Updated");
         } catch (error) {
 
           if (error.response) {
@@ -135,6 +152,14 @@ useEffect(() => {
             ref={inputCAddressRef}
             className="customerInput"
           />
+
+         <div id="errorNumber1" className="errormsg">
+          {errorMessage}
+        </div>
+
+        <div id="success" className="successmsg">
+          {successMessage}
+        </div>
 
        {!isEditing ? (
           <Button variant="contained" onClick={addNewCustomer} >Add Customer </Button>

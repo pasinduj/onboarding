@@ -25,6 +25,8 @@ const SaleName = ({ refreshSales ,selectedSale }) => {
   const [selectedDate, setSelectedDate] = useState(dayjs()); 
   const inputSIdRef = useRef(null);
   const [isEditing, setIsEditing] = useState(false); // Track edit mode
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState(""); 
 
   useEffect(() => {
     if (selectedSale) {
@@ -101,6 +103,11 @@ const SaleName = ({ refreshSales ,selectedSale }) => {
   const addNewSale = async () => {
   //  console.log(saleId);
 
+  if (customerId === "" || customerId === "" || storeId === "" ) {
+    setErrorMessage("Product , Customer and Store  cannot be empty!");
+    return;
+  }
+
     if (customerId !== "") {
       try {
         await axios.post(
@@ -119,6 +126,8 @@ const SaleName = ({ refreshSales ,selectedSale }) => {
         if (refreshSales) refreshSales(); 
 
         clearFields();
+        setErrorMessage("");
+        setSuccessMessage("Successfully Added");
    
       } catch (error) {
         console.error("Failed to save new Sale:", error);
@@ -160,7 +169,8 @@ const SaleName = ({ refreshSales ,selectedSale }) => {
 
      clearFields();
      id="";
-
+     setErrorMessage("");
+     setSuccessMessage("Successfully Updated"); 
 
 
     }
@@ -268,6 +278,14 @@ const SaleName = ({ refreshSales ,selectedSale }) => {
 
           <div>
             </div>
+
+            <div id="errorNumber1" className="errormsg">
+          {errorMessage}
+        </div>
+
+        <div id="success" className="successmsg">
+          {successMessage}
+        </div>
 
             {!isEditing ? (
           <Button variant="contained" onClick={addNewSale}>

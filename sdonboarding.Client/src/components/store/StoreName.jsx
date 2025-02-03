@@ -2,8 +2,8 @@ import { useRef,useEffect,useState } from "react";
 import { useDispatch } from "react-redux";
 import { addStoreName,updateStoreInfo } from "../../actions";
 import { Button } from "@mui/material";
-import TextField from '@mui/material/TextField';
 import axios from "axios";
+import './StoreName.css';
 
 const StoreName = ({ refreshStores,selectedStore }) => {
     const dispatch = useDispatch();
@@ -11,6 +11,8 @@ const StoreName = ({ refreshStores,selectedStore }) => {
     const inputSAddressRef = useRef(null);
     const inputSIdRef = useRef(null);
     const [isEditing, setIsEditing] = useState(false); // Track edit mode
+    const [errorMessage, setErrorMessage] = useState("");
+    const [successMessage, setSuccessMessage] = useState(""); 
 
       // Populate the input fields with the selected store's data
 useEffect(() => {
@@ -28,6 +30,13 @@ useEffect(() => {
     const addNewStore = async () => {
       const name = inputSNameRef.current.value.trim();
       const address = inputSAddressRef.current.value.trim();
+
+      if (name === "" || address === "") {
+        setErrorMessage("Store Name and Address cannot be empty!");
+        return;
+      }
+
+
       if (name !== "") {
         try {
           const response = await axios.post(
@@ -45,6 +54,9 @@ useEffect(() => {
           if (refreshStores) refreshStores();
   
           clearFields();
+          setErrorMessage("");
+         
+          setSuccessMessage("Successfully Added");
         } catch (error) {
           console.error("Failed to save new store:", error);
         }
@@ -59,7 +71,7 @@ useEffect(() => {
       const name = inputSNameRef.current.value.trim();
       const address = inputSAddressRef.current.value.trim();
 
-      console.log({ id, name, address });
+     
   
       console.log(id);
       console.log(address);
@@ -89,6 +101,8 @@ useEffect(() => {
           // Optionally refresh the product list to stay in sync
           if (refreshStores) refreshStores();
           clearFields();
+          setErrorMessage("");
+          setSuccessMessage("Successfully Updated");
           
         } catch (error) {
 
@@ -139,6 +153,16 @@ useEffect(() => {
             ref={inputSAddressRef}
             className="storeInput"
           />
+
+<div id="errorNumber1" className="errormsg">
+          {errorMessage}
+        </div>
+
+        <div id="success" className="successmsg">
+          {successMessage}
+        </div>
+
+
 
       {!isEditing ? (
           <Button variant="contained" onClick={addNewStore} >Add Store </Button>

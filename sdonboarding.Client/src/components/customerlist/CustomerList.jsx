@@ -11,15 +11,18 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from "@mui/material/DialogTitle";
 import CustomerName from "./../customer/CustomerName";
+import './CustomerList.css';
+
 
 const CustomerList = () => {
   const customers = useSelector((state) => state.customers);
   console.log(customers);
   const dispatch = useDispatch();
-
+  const [errorMessage, setErrorMessage] = useState("");
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedCustomerId, setSelectedCustomerId] = useState(null);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(""); 
   
     // Fetch customers from the REST API on component load
   useEffect(() => {
@@ -60,8 +63,8 @@ const CustomerList = () => {
   };
 
   const handleEdit = (id) => {
-    console.log('Edit button press');
-    console.log(id);
+    setErrorMessage("");
+    setSuccessMessage("");
     setSelectedCustomerId(id);
     const customer = customers.find((customer) => customer.id === id);
     setSelectedCustomer(customer);
@@ -84,7 +87,7 @@ const CustomerList = () => {
   const columns = [
     {field: "id", headerName: "Id",flex:1},
     { field: "name", headerName: "Name", flex: 1 },
-    { field: "address", headerName: "Address", flex: 1 },
+    { field: "address", headerName: "Address", flex: 2 },
     {
       field: "edit",
       headerName: "",
@@ -98,7 +101,7 @@ const CustomerList = () => {
           Edit
         </Button>
       ),
-      flex: 0.5,
+      flex:1,
     },
     {
       field: "delete",
@@ -116,7 +119,7 @@ const CustomerList = () => {
 
 
       ),
-      flex: 0.8,
+      flex: 1,
     },
   ];
 
@@ -130,7 +133,7 @@ const CustomerList = () => {
     <div>
 
    <CustomerName refreshCustomers={() => {}} selectedCustomer={selectedCustomer} />
-    <div style={{ height: 400, width: "100%" }}>
+    <div className="customerlist" >
       <h3>Customers:</h3>
       <DataGrid
         rows={rows}
