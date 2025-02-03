@@ -24,7 +24,7 @@ const SaleList = () => {
   const fetchSales = async () => {
     console.log('call fetch sales');
     try {
-      const response = await axios.get("https://onboardinginventoryapp.azurewebsites.net/api/Sales",{
+      const response = await axios.get("https://onboardinginventryapp.azurewebsites.net/api/Sales",{
           headers: {
             'Access-Control-Allow-Origin': '*'
         }
@@ -47,7 +47,7 @@ const SaleList = () => {
     const fetchCustomers = async () => {
       try {
         const response = await axios.get(
-          "https://onboardinginventoryapp.azurewebsites.net/api/Customer",
+          "https://onboardinginventryapp.azurewebsites.net/api/Customer",
           {
             headers: {
               'Access-Control-Allow-Origin': '*'
@@ -63,7 +63,7 @@ const SaleList = () => {
     const fetchProducts = async () => {
       try {
         const response = await axios.get(
-          "https://onboardinginventoryapp.azurewebsites.net/api/Product"
+          "https://onboardinginventryapp.azurewebsites.net/api/Product"
         );
         setProducts(response.data);
       } catch (error) {
@@ -74,7 +74,7 @@ const SaleList = () => {
     const fetchStores = async () => {
       try {
         const response = await axios.get(
-          "https://onboardinginventoryapp.azurewebsites.net/api/Store"
+          "https://onboardinginventryapp.azurewebsites.net/api/Store"
         );
         setStores(response.data);
       } catch (error) {
@@ -94,7 +94,7 @@ const SaleList = () => {
 
     const saleId = id; 
     try{
-      const response = axios.delete('https://onboardinginventoryapp.azurewebsites.net/api/Sales/' + saleId ,
+      const response = axios.delete('https://onboardinginventryapp.azurewebsites.net/api/Sales/' + saleId ,
 
         {
           headers: {

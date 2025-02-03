@@ -41,7 +41,7 @@ useEffect(() => {
       if (name !== "") {
         try {
           const response = await axios.post(
-            "https://onboardinginventoryapp.azurewebsites.net/api/Product",
+            "https://onboardinginventryapp.azurewebsites.net/api/Product",
             { name, price }
           );
   
@@ -75,7 +75,7 @@ useEffect(() => {
 
 
           const response = await axios.put(
-            `https://onboardinginventoryapp.azurewebsites.net/api/Product/${id}`, // URL
+            `https://onboardinginventryapp.azurewebsites.net/api/Product/${id}`, // URL
             { id,name, price }, // Data payload (body)
             {
               headers: {

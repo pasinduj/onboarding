@@ -40,7 +40,7 @@ useEffect(() => {
       if (name !== "") {
         try {
           const response = await axios.post(
-            "https://onboardinginventoryapp.azurewebsites.net/api/Store",
+            "https://onboardinginventryapp.azurewebsites.net/api/Store",
             { name, address }
           );
   
@@ -80,7 +80,7 @@ useEffect(() => {
 
 
           const response = await axios.put(
-            `https://onboardinginventoryapp.azurewebsites.net/api/Store/${id}`, // URL
+            `https://onboardinginventryapp.azurewebsites.net/api/Store/${id}`, // URL
             { id,name, address }, // Data payload (body)
             {
               headers: {

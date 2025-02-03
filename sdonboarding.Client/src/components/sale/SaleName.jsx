@@ -47,7 +47,7 @@ const SaleName = ({ refreshSales ,selectedSale }) => {
     const fetchCustomers = async () => {
       try {
         const response = await axios.get(
-          "https://onboardinginventoryapp.azurewebsites.net/api/Customer"
+          "https://onboardinginventryapp.azurewebsites.net/api/Customer"
         );
         setCustomers(response.data);
       } catch (error) {
@@ -62,7 +62,7 @@ const SaleName = ({ refreshSales ,selectedSale }) => {
     const fetchProducts = async () => {
       try {
         const response = await axios.get(
-          "https://onboardinginventoryapp.azurewebsites.net/api/Product"
+          "https://onboardinginventryapp.azurewebsites.net/api/Product"
         );
         setProducts(response.data);
       } catch (error) {
@@ -77,7 +77,7 @@ const SaleName = ({ refreshSales ,selectedSale }) => {
     const fetchStores = async () => {
       try {
         const response = await axios.get(
-          "https://onboardinginventoryapp.azurewebsites.net/api/Store"
+          "https://onboardinginventryapp.azurewebsites.net/api/Store"
         );
         setStores(response.data);
       } catch (error) {
@@ -111,7 +111,7 @@ const SaleName = ({ refreshSales ,selectedSale }) => {
     if (customerId !== "") {
       try {
         await axios.post(
-          "https://onboardinginventoryapp.azurewebsites.net/api/Sales",
+          "https://onboardinginventryapp.azurewebsites.net/api/Sales",
           {
             customerId: customerId,
             productId: productId,
@@ -144,7 +144,7 @@ const SaleName = ({ refreshSales ,selectedSale }) => {
      
 
       const response = await axios.put(
-        `https://onboardinginventoryapp.azurewebsites.net/api/Sales/${saleId}`, // URL
+        `https://onboardinginventryapp.azurewebsites.net/api/Sales/${saleId}`, // URL
         { id,customerId, productId,storeId }, // Data payload (body)
         {
           headers: {
