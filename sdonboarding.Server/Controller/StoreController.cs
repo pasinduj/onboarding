@@ -51,13 +51,21 @@ namespace sdonboarding.Server.Controller
         [HttpPost]
         public async Task<ActionResult<Store>> PostStore(Dtos.StoreDto store)
         {
-            var entity = Mappers.StoreMapper.DtoToEntity(store);
+            try
+            {
+                var entity = Mappers.StoreMapper.DtoToEntity(store);
 
             _context.Stores.Add(entity);
 
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetStore", new { id = store.Id }, Mappers.StoreMapper.EntityToDto(entity));
+
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
         }
 
 
@@ -65,16 +73,31 @@ namespace sdonboarding.Server.Controller
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteStore(int id)
         {
-            var store = await _context.Stores.FindAsync(id);
-            if (store == null)
+            if (id <= 0)  // Check if id is invalid (0 or negative)
             {
-                return NotFound();
+                return BadRequest("Invalid store ID.");
+            }
+            else {
+                try
+                {
+                    var store = await _context.Stores.FindAsync(id);
+                    if (store == null)
+                    {
+                        return NotFound();
+                    }
+
+                    _context.Stores.Remove(store);
+                    await _context.SaveChangesAsync();
+
+                    return NoContent();
+                }
+                catch (Exception e)
+                {
+                    return StatusCode(500, "An error occurred while processing your request.");
+                }
             }
 
-            _context.Stores.Remove(store);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+          
         }
 
 
