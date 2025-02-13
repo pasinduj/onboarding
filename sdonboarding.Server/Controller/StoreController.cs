@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using sdonboarding.Server.Models;
 
 namespace sdonboarding.Server.Controller
@@ -10,25 +11,35 @@ namespace sdonboarding.Server.Controller
     public class StoreController : ControllerBase
     {
         private readonly OnBoardingContext _context;
+        private readonly ILogger<StoreController> _logger;
 
-        public StoreController(OnBoardingContext context)
+        public StoreController(OnBoardingContext context, ILogger<StoreController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         // GET: api/Store
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Dtos.StoreDto>>> GetStores()
         {
-            var _stores = await _context.Stores.Select(s => Mappers.StoreMapper.EntityToDto(s)).ToListAsync();
+            try
+            {
+                var _stores = await _context.Stores.Select(s => Mappers.StoreMapper.EntityToDto(s)).ToListAsync();
 
-            if (_stores.Count > 0)
-            {
-                return Ok(_stores);
+                if (_stores.Count > 0)
+                {
+                    return Ok(_stores);
+                }
+                else
+                {
+                    return BadRequest("There are no stores at the moment");
+                }
             }
-            else
+            catch (Exception e)
             {
-                return BadRequest("There are no stores at the moment");
+                _logger.LogError(e, "An error occurred while processing your request.");
+                return StatusCode(500, "An error occurred while processing your request.");
             }
         }
 
@@ -36,14 +47,29 @@ namespace sdonboarding.Server.Controller
         [HttpGet("{id}")]
         public async Task<ActionResult<Dtos.StoreDto>> GetStore(int id)
         {
-            var store = await _context.Stores.FindAsync(id);
-
-            if (store == null)
+            if (id <= 0)  // Check if id is invalid (0 or negative)
             {
-                return NotFound();
+                return BadRequest("Invalid store ID.");
             }
+            else
+            {
+                try
+                {
+                    var store = await _context.Stores.FindAsync(id);
 
-            return Mappers.StoreMapper.EntityToDto(store);
+                    if (store == null)
+                    {
+                        return NotFound();
+                    }
+
+                    return Mappers.StoreMapper.EntityToDto(store);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "An error occurred while processing your request.");
+                    return StatusCode(500, "An error occurred while processing your request.");
+                }
+            }
         }
 
         // POST: api/Store
@@ -64,6 +90,7 @@ namespace sdonboarding.Server.Controller
             }
             catch (Exception e)
             {
+                _logger.LogError(e, "An error occurred while processing your request.");
                 return StatusCode(500, "An error occurred while processing your request.");
             }
         }
@@ -93,6 +120,7 @@ namespace sdonboarding.Server.Controller
                 }
                 catch (Exception e)
                 {
+                    _logger.LogError(e, "An error occurred while processing your request.");
                     return StatusCode(500, "An error occurred while processing your request.");
                 }
             }
