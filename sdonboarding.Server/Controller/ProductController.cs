@@ -11,10 +11,12 @@ namespace sdonboarding.Server.Controller
     {
 
         private readonly OnBoardingContext _context;
+        private readonly ILogger<ProductController> _logger;
 
-        public ProductController(OnBoardingContext context)
+        public ProductController(OnBoardingContext context, ILogger<ProductController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
 
@@ -22,15 +24,23 @@ namespace sdonboarding.Server.Controller
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Dtos.ProductDto>>> GetProducts()
         {
-            var _products = await _context.Products.Select(s => Mappers.ProductMapper.EntityToDto(s)).ToListAsync();
+            try
+            {
+                var _products = await _context.Products.Select(s => Mappers.ProductMapper.EntityToDto(s)).ToListAsync();
 
-            if (_products.Count > 0)
-            {
-                return Ok(_products);
+                if (_products.Count > 0)
+                {
+                    return Ok(_products);
+                }
+                else
+                {
+                    return BadRequest("There are no products at the moment");
+                }
             }
-            else
+            catch (Exception e)
             {
-                return BadRequest("There are no products at the moment");
+                _logger.LogError(e, "An error occurred while processing your request.");
+                return StatusCode(500, "An error occurred while processing your request.");
             }
         }
 
@@ -38,14 +48,29 @@ namespace sdonboarding.Server.Controller
         [HttpGet("{id}")]
         public async Task<ActionResult<Dtos.ProductDto>> GetProduct(int id)
         {
-            var product = await _context.Products.FindAsync(id);
-
-            if (product == null)
+            if (id <= 0)  // Check if id is invalid (0 or negative)
             {
-                return NotFound();
+                return BadRequest("Invalid store ID.");
             }
+            else
+            {
+                try
+                {
+                    var product = await _context.Products.FindAsync(id);
 
-            return Mappers.ProductMapper.EntityToDto(product);
+                    if (product == null)
+                    {
+                        return NotFound();
+                    }
+
+                    return Mappers.ProductMapper.EntityToDto(product);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "An error occurred while processing your request.");
+                    return StatusCode(500, "An error occurred while processing your request.");
+                }
+            }
         }
 
 
@@ -94,29 +119,52 @@ namespace sdonboarding.Server.Controller
         [HttpPost]
         public async Task<ActionResult<Product>> PostProduct(Dtos.ProductDto product)
         {
-            var entity = Mappers.ProductMapper.DtoToEntity(product);
+            try
+            {
+                var entity = Mappers.ProductMapper.DtoToEntity(product);
 
-            _context.Products.Add(entity);
+                _context.Products.Add(entity);
 
-            await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetProduct", new { id = product.Id }, Mappers.ProductMapper.EntityToDto(entity));
+                return CreatedAtAction("GetProduct", new { id = product.Id }, Mappers.ProductMapper.EntityToDto(entity));
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "An error occurred while processing your request.");
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
         }
 
         // DELETE: api/Product/7
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
-            var product = await _context.Products.FindAsync(id);
-            if (product == null)
+            if (id <= 0)  // Check if id is invalid (0 or negative)
             {
-                return NotFound();
+                return BadRequest("Invalid store ID.");
             }
+            else
+            {
+                try
+                {
+                    var product = await _context.Products.FindAsync(id);
+                    if (product == null)
+                    {
+                        return NotFound();
+                    }
 
-            _context.Products.Remove(product);
-            await _context.SaveChangesAsync();
+                    _context.Products.Remove(product);
+                    await _context.SaveChangesAsync();
 
-            return NoContent();
+                    return NoContent();
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "An error occurred while processing your request.");
+                    return StatusCode(500, "An error occurred while processing your request.");
+                }
+            }
         }
 
     }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using sdonboarding.Server.Models;
 
 namespace sdonboarding.Server.Controller
@@ -11,25 +12,35 @@ namespace sdonboarding.Server.Controller
     {
 
         private readonly OnBoardingContext _context;
+        private readonly ILogger<CustomerController> _logger;
 
-        public CustomerController(OnBoardingContext context)
+        public CustomerController(OnBoardingContext context, ILogger<CustomerController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         // GET: api/Customers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Dtos.CustomerDto>>> GetCustomers()
         {
-            var _customers = await _context.Customers.Select(s => Mappers.CustomerMapper.EntityToDto(s)).ToListAsync();
+            try
+            {
+                var _customers = await _context.Customers.Select(s => Mappers.CustomerMapper.EntityToDto(s)).ToListAsync();
 
-            if (_customers.Count > 0)
-            {
-                return Ok(_customers);
+                if (_customers.Count > 0)
+                {
+                    return Ok(_customers);
+                }
+                else
+                {
+                    return BadRequest("There are no customers at the moment");
+                }
             }
-            else
+            catch (Exception e)
             {
-                return BadRequest("There are no customers at the moment");
+                _logger.LogError(e, "An error occurred while processing your request.");
+                return StatusCode(500, "An error occurred while processing your request.");
             }
         }
 
@@ -38,14 +49,29 @@ namespace sdonboarding.Server.Controller
         [HttpGet("{id}")]
         public async Task<ActionResult<Dtos.CustomerDto>> GetCustomer(int id)
         {
-            var customer = await _context.Customers.FindAsync(id);
-
-            if (customer == null)
+            if (id <= 0)  // Check if id is invalid (0 or negative)
             {
-                return NotFound();
+                return BadRequest("Invalid store ID.");
             }
+            else
+            {
+                try
+                {
+                    var customer = await _context.Customers.FindAsync(id);
 
-            return Mappers.CustomerMapper.EntityToDto(customer);
+                    if (customer == null)
+                    {
+                        return NotFound();
+                    }
+
+                    return Mappers.CustomerMapper.EntityToDto(customer);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "An error occurred while processing your request.");
+                    return StatusCode(500, "An error occurred while processing your request.");
+                }
+            }
         }
 
 
@@ -93,13 +119,21 @@ namespace sdonboarding.Server.Controller
         [HttpPost]
         public async Task<ActionResult<Customer>> PostCustomer(Dtos.CustomerDto customer)
         {
-            var entity = Mappers.CustomerMapper.DtoToEntity(customer);
+            try
+            {
+                var entity = Mappers.CustomerMapper.DtoToEntity(customer);
 
-            _context.Customers.Add(entity);
+                _context.Customers.Add(entity);
 
-            await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCustomer", new { id = customer.Id }, Mappers.CustomerMapper.EntityToDto(entity));
+                return CreatedAtAction("GetCustomer", new { id = customer.Id }, Mappers.CustomerMapper.EntityToDto(entity));
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "An error occurred while processing your request.");
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
         }
 
 
@@ -108,16 +142,24 @@ namespace sdonboarding.Server.Controller
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCustomer(int id)
         {
-            var customer = await _context.Customers.FindAsync(id);
-            if (customer == null)
+            try
             {
-                return NotFound();
+                var customer = await _context.Customers.FindAsync(id);
+                if (customer == null)
+                {
+                    return NotFound();
+                }
+
+                _context.Customers.Remove(customer);
+                await _context.SaveChangesAsync();
+
+                return NoContent();
             }
-
-            _context.Customers.Remove(customer);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            catch (Exception e)
+            {
+                _logger.LogError(e, "An error occurred while processing your request.");
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
         }
 
 
