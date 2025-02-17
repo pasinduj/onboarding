@@ -16,30 +16,32 @@ import './CustomerList.css';
 
 const CustomerList = () => {
   const customers = useSelector((state) => state.customers);
-  console.log(customers);
+  
   const dispatch = useDispatch();
   const [errorMessage, setErrorMessage] = useState("");
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedCustomerId, setSelectedCustomerId] = useState(null);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [successMessage, setSuccessMessage] = useState(""); 
+
+
+  const fetchCustomers = async () => {
+    try {
+      const response = await axios.get("https://onboardinginventryapp.azurewebsites.net/api/Customer",{
+        headers: {
+          'Access-Control-Allow-Origin': '*'
+      }
+      });
+    
+      dispatch(setCustomers(response.data)); 
+      console.log('found records from API'+ response);
+    } catch (error) {
+      console.error("Failed to fetch customers:", error);
+    }
+  };
   
     // Fetch customers from the REST API on component load
-  useEffect(() => {
-    const fetchCustomers = async () => {
-      try {
-        const response = await axios.get("https://onboardinginventryapp.azurewebsites.net/api/Customer",{
-          headers: {
-            'Access-Control-Allow-Origin': '*'
-        }
-        });
-        console.log(response.data);
-        dispatch(setCustomers(response.data)); 
-        console.log('found records from API'+ response);
-      } catch (error) {
-        console.error("Failed to fetch customers:", error);
-      }
-    };
+  useEffect(() => {   
 
     fetchCustomers();
   }, [dispatch]);

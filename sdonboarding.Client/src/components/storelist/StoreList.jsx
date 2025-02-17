@@ -15,7 +15,7 @@ import './StoreList.css';
 
 const StoreList = () => {
   const stores = useSelector((state) => state.stores);
-  console.log(stores);
+  
   const dispatch = useDispatch();
 
   const [openDialog, setOpenDialog] = useState(false);
@@ -77,8 +77,7 @@ const StoreList = () => {
   
 
   const handleEdit = (id) => {
-    console.log('Edit button press');
-    console.log(id);
+   
     setSelectedStoreId(id);
     const store = stores.find((store) => store.id === id);
     setSelectedStore(store);

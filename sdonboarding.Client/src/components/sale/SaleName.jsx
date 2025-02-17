@@ -73,17 +73,18 @@ const SaleName = ({ refreshSales ,selectedSale }) => {
     fetchProducts();
   }, []);
 
-  useEffect(() => {
-    const fetchStores = async () => {
-      try {
-        const response = await axios.get(
-          "https://onboardinginventryapp.azurewebsites.net/api/Store"
-        );
-        setStores(response.data);
-      } catch (error) {
-        console.error("Failed to fetch stores:", error);
-      }
-    };
+  const fetchStores = async () => {
+    try {
+      const response = await axios.get(
+        "https://onboardinginventryapp.azurewebsites.net/api/Store"
+      );
+      setStores(response.data);
+    } catch (error) {
+      console.error("Failed to fetch stores:", error);
+    }
+  };
+
+  useEffect(() => {    
 
     fetchStores();
   }, []);

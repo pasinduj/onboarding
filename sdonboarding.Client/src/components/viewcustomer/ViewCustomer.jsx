@@ -17,8 +17,13 @@ function ViewCustomer() {
      </thead>
      <tbody>
         
-      { items.map((item) => (
-        <li> {item} </li>
+      { items.map((item, index) => (
+       <tr key={item}>
+       <td>{index + 1}</td>
+       <td>{item}</td>
+       <td></td>
+       <td></td>
+     </tr>
       ) )
 
 

@@ -47,7 +47,7 @@ useEffect(() => {
           );
   
           // Assuming the response contains the created customer with its correct ID
-          const createdCustomer = response.data;
+          const createdCustomer = response?.data;
   
           // Dispatch the action with the created customer object
           dispatch(addCustomerName(createdCustomer));
@@ -66,7 +66,7 @@ useEffect(() => {
     };
 
     const updateCustomer = async () => {
-      console.log('updateCustomer button press');
+     
       const id = inputCIdRef.current.value.trim();
       const name = inputCNameRef.current.value.trim();
       const address = inputCAddressRef.current.value.trim();

@@ -69,7 +69,7 @@ useEffect(() => {
       const name = inputPNameRef.current.value.trim();
       const price = inputPPriceRef.current.value.trim();
 
-      console.log(id);
+     
       if (name !== "") {
         try {
 

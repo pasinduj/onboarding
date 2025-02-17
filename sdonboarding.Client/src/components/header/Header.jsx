@@ -8,7 +8,7 @@ function Header() {
 
      // Define the functions for each button click
     function handleCustomersClick() {
-      console.log('called');
+      
       navigate('/viewCustomer'); // Replace with your route for the ViewCustomer page
   };
 

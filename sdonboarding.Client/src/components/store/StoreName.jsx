@@ -73,8 +73,7 @@ useEffect(() => {
 
      
   
-      console.log(id);
-      console.log(address);
+     
       if (name !== "") {
         try {
 

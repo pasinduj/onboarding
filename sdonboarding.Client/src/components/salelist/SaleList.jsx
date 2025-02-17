@@ -11,7 +11,7 @@ import SaleName from "./../sale/SaleName";
 
 const SaleList = () => {
   const sales = useSelector((state) => state.sales|| []);
-  console.log(sales);
+  
   const dispatch = useDispatch();
   const [selectedDate, setSelectedDate] = useState(dayjs()); 
 
@@ -22,7 +22,7 @@ const SaleList = () => {
   const [selectedSaleId, setSelectedSaleId] = useState(null);
 
   const fetchSales = async () => {
-    console.log('call fetch sales');
+    
     try {
       const response = await axios.get("https://onboardinginventryapp.azurewebsites.net/api/Sales",{
           headers: {
@@ -31,56 +31,55 @@ const SaleList = () => {
         }
 
       );
-      console.log(response);
+      
       dispatch(setSales(response.data)); 
-      console.log('found records from API'+ response);
+      
     } catch (error) {
       console.error("Failed to fetch sales:", error);
     }
   };
+
+  const fetchCustomers = async () => {
+    try {
+      const response = await axios.get(
+        "https://onboardinginventryapp.azurewebsites.net/api/Customer",
+        {
+          headers: {
+            'Access-Control-Allow-Origin': '*'
+        }
+        }
+      );
+      setCustomers(response.data);
+    } catch (error) {
+      console.error("Failed to fetch customers:", error);
+    }
+  };
   
+  const fetchProducts = async () => {
+    try {
+      const response = await axios.get(
+        "https://onboardinginventryapp.azurewebsites.net/api/Product"
+      );
+      setProducts(response.data);
+    } catch (error) {
+      console.error("Failed to fetch products:", error);
+    }
+  };
+
+  const fetchStores = async () => {
+    try {
+      const response = await axios.get(
+        "https://onboardinginventryapp.azurewebsites.net/api/Store"
+      );
+      setStores(response.data);
+    } catch (error) {
+      console.error("Failed to fetch stores:", error);
+    }
+  };
+
     // Fetch products from the REST API on component load
   useEffect(() => {
     
-    
-
-    const fetchCustomers = async () => {
-      try {
-        const response = await axios.get(
-          "https://onboardinginventryapp.azurewebsites.net/api/Customer",
-          {
-            headers: {
-              'Access-Control-Allow-Origin': '*'
-          }
-          }
-        );
-        setCustomers(response.data);
-      } catch (error) {
-        console.error("Failed to fetch customers:", error);
-      }
-    };
-
-    const fetchProducts = async () => {
-      try {
-        const response = await axios.get(
-          "https://onboardinginventryapp.azurewebsites.net/api/Product"
-        );
-        setProducts(response.data);
-      } catch (error) {
-        console.error("Failed to fetch products:", error);
-      }
-    };
-
-    const fetchStores = async () => {
-      try {
-        const response = await axios.get(
-          "https://onboardinginventryapp.azurewebsites.net/api/Store"
-        );
-        setStores(response.data);
-      } catch (error) {
-        console.error("Failed to fetch stores:", error);
-      }
-    };
 
     fetchSales();
     fetchCustomers();
@@ -111,18 +110,15 @@ const SaleList = () => {
   };
 
   const handleEdit = (id) => {
-    console.log('Edit button press');
-    console.log(id);
+        
     setSelectedSaleId(id);
     const sale = sales.find((sale) => sale.id === id);
-    console.log(sale);
     setSelectedSale(sale);
    
   };
 
   // Helper function to get name by ID
-  const getCustomerName = (cid) => {
-    console.log(cid);
+  const getCustomerName = (cid) => {    
    // console.log(customers);
   //  console.log(customers.length);
     if (!customers.length) return "Loading..."; 
@@ -131,8 +127,7 @@ const SaleList = () => {
     return customer ? customer.name : "Unknown";
   };
 
-  const getProductName = (pid) => {
-    console.log(pid);
+  const getProductName = (pid) => {    
  //    console.log(products);
     if (!products.length) return "Loading...";
     const product = products.find((p) => p.id === pid);

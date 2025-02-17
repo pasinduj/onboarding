@@ -16,7 +16,7 @@ import './ProductList.css';
 
 const ProductList = () => {
   const products = useSelector((state) => state.products);
-  console.log(products);
+  
   const dispatch = useDispatch();
 
   const [openDialog, setOpenDialog] = useState(false);
@@ -33,9 +33,9 @@ const ProductList = () => {
         }
 
       );
-      console.log(response);
+      
       dispatch(setProducts(response.data)); 
-      console.log('found records from API'+ response);
+      
     } catch (error) {
       console.error("Failed to fetch products:", error);
     }
@@ -78,8 +78,7 @@ const ProductList = () => {
 
 
   const handleEdit = (id) => {
-    console.log('Edit button press');
-    console.log(id);
+      
     setSelectedProductId(id);
     const product = products.find((product) => product.id === id);
     setSelectedProduct(product);

@@ -16,6 +16,27 @@ import Button from '@mui/material/Button';
 function App() {
 
   const [activeSection, setActiveSection] = useState("customers"); // Default to "customers"
+
+
+  const selectActiveSection = () => {
+
+    if (activeSection === "customers" )
+      return  <CustomerList /> ;
+          
+
+     if(activeSection === "products")        
+       return <ProductList /> ;
+
+
+    if(activeSection === "stores")       
+    return    <StoreList /> ;
+     
+    
+    if(activeSection === "sales"){}
+     return  <SaleList /> ;
+     
+    
+  };
   
 
   return (
@@ -33,36 +54,8 @@ function App() {
          </div>
 
 
-     
-         {activeSection === "customers" && (
-        <>
-          
-          <CustomerList />
-        </>
-      )}
-
-      {activeSection === "products" && (
-        <>
-          
-          <ProductList />
-        </>
-      )}
-
-
-{activeSection === "stores" && (
-        <>
-         
-          <StoreList />
-        </>
-      )}
-
-{
-activeSection === "sales" && (
-        <>
-          
-          <SaleList />
-        </>
-      )}
+         {selectActiveSection()}
+       
 
   </div>
 
