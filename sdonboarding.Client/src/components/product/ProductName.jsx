@@ -69,6 +69,10 @@ useEffect(() => {
       const name = inputPNameRef.current.value.trim();
       const price = inputPPriceRef.current.value.trim();
 
+      if (name === "" || price === "") {
+        setErrorMessage("Product Name and Price cannot be empty!");
+        return;
+      }
      
       if (name !== "") {
         try {

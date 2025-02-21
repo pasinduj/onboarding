@@ -71,6 +71,14 @@ useEffect(() => {
       const name = inputCNameRef.current.value.trim();
       const address = inputCAddressRef.current.value.trim();
 
+     
+
+      if (name === "" || address === "") {
+        setErrorMessage("Customer Name and Address cannot be empty!");
+        return;
+      }
+
+
    
       if (name !== "") {
         try {

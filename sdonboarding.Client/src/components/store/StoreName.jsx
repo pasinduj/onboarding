@@ -71,7 +71,11 @@ useEffect(() => {
       const name = inputSNameRef.current.value.trim();
       const address = inputSAddressRef.current.value.trim();
 
-     
+      if (name === "" || address === "") {
+        setErrorMessage("Store Name and Address cannot be empty!");
+        return;
+      }
+
   
      
       if (name !== "") {

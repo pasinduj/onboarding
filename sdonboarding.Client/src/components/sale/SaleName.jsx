@@ -139,11 +139,15 @@ const SaleName = ({ refreshSales ,selectedSale }) => {
 
   const updateNewSale = async () => {
   
+    if (customerId === "" || customerId === "" || storeId === "" ) {      
+      setErrorMessage("Product , Customer and Store  cannot be empty!");
+      return;
+    }
 
-    if (saleId !== "") {
+    if (saleId !== "" && customerId !== "" && customerId !== "" && storeId !== ""  ) {
       var id = saleId;
      
-
+      try {
       const response = await axios.put(
         `https://onboardinginventryapp.azurewebsites.net/api/Sales/${saleId}`, // URL
         { id,customerId, productId,storeId }, // Data payload (body)
@@ -162,6 +166,9 @@ const SaleName = ({ refreshSales ,selectedSale }) => {
 
       // Optionally refresh the customer list to stay in sync
       if (refreshSales) refreshSales();
+    }catch(error){
+      console.error("Failed to update  Sale:", error);
+    }
 
       // Clear the input fields
      // inputCIdRef.current.value = "";
@@ -174,6 +181,9 @@ const SaleName = ({ refreshSales ,selectedSale }) => {
      setSuccessMessage("Successfully Updated"); 
 
 
+    }else{
+      setErrorMessage("Product , Customer and Store  cannot be empty!");
+      return;
     }
   };
 
