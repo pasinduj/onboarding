@@ -1,0 +1,15 @@
+.errormsg{
+    color: red;
+    font-weight: bold;
+    margin-top: 5px;  
+}
+
+.add-customer{
+    width: 900px;
+}
+
+.successmsg{
+    color: green;
+    font-weight: bold;
+    margin-top: 5px; 
+}
