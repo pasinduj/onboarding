@@ -102,7 +102,7 @@ const SaleName = ({ refreshSales ,selectedSale }) => {
   };
 
   const addNewSale = async () => {
-  //  console.log(saleId);
+
 
   if (customerId === "" || customerId === "" || storeId === "" ) {
     setErrorMessage("Product , Customer and Store  cannot be empty!");

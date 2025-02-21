@@ -34,7 +34,7 @@ const CustomerList = () => {
       });
     
       dispatch(setCustomers(response.data)); 
-      console.log('found records from API'+ response);
+      
     } catch (error) {
       console.error("Failed to fetch customers:", error);
     }

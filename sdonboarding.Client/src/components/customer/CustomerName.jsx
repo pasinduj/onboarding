@@ -71,7 +71,7 @@ useEffect(() => {
       const name = inputCNameRef.current.value.trim();
       const address = inputCAddressRef.current.value.trim();
 
-      console.log(id);
+   
       if (name !== "") {
         try {
         

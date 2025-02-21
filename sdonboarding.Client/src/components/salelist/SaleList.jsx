@@ -119,16 +119,15 @@ const SaleList = () => {
 
   // Helper function to get name by ID
   const getCustomerName = (cid) => {    
-   // console.log(customers);
-  //  console.log(customers.length);
+  
     if (!customers.length) return "Loading..."; 
     const customer = customers.find((c) => c.id === cid);
- //   console.log(customer);
+ 
     return customer ? customer.name : "Unknown";
   };
 
   const getProductName = (pid) => {    
- //    console.log(products);
+
     if (!products.length) return "Loading...";
     const product = products.find((p) => p.id === pid);
     return product ? product.name : "Unknown";
