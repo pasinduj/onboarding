@@ -104,7 +104,7 @@ const SaleName = ({ refreshSales ,selectedSale }) => {
   const addNewSale = async () => {
 
 
-  if (customerId === "" || customerId === "" || storeId === "" ) {
+  if (customerId === "" || productId === "" || storeId === "" ) {
     setErrorMessage("Product , Customer and Store  cannot be empty!");
     return;
   }
@@ -139,7 +139,7 @@ const SaleName = ({ refreshSales ,selectedSale }) => {
 
   const updateNewSale = async () => {
   
-    if (customerId === "" || customerId === "" || storeId === "" ) {      
+    if (customerId === "" || productId === "" || storeId === "" ) {      
       setErrorMessage("Product , Customer and Store  cannot be empty!");
       return;
     }
